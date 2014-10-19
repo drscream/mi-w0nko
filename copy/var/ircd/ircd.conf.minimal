@@ -1,0 +1,327 @@
+# -----------------------------------------------------------------------------
+# w0nko minimal configuration file TEMPLATE
+# Modified by mdata and system information
+# -----------------------------------------------------------------------------
+
+General {
+ name = "%FQDN%";
+ description = "%DESCRIPTION%";
+ numeric = 1;
+ vhost = "%IPv4%";
+};
+
+Admin {
+ Location = "%DESCRIPTION%";
+ Contact  = "admin@%FQDN%";
+};
+
+# -----------------------------------------------------------------------------
+# Classes (aka Ylines)
+# -----------------------------------------------------------------------------
+# name     = "<class>";      pingfreq = time;  connectfreq = time;
+# maxlinks = number 0 or 1;  sendq    = size;     usermode = "+i";
+#
+# Uplinks
+Class {
+ name = "Server";
+ pingfreq = 3 minutes;
+ connectfreq = 1 minutes;
+ maxlinks = 1;
+ sendq = 40000000;
+};
+
+# All the leaf servers you hub for.
+Class {
+ name = "LeafServer";
+ pingfreq = 3 minutes;
+ connectfreq = 1 minutes;
+ maxlinks = 0;
+ sendq = 40000000;
+};
+
+# Client class (i.e. everyone)
+Class {
+ name = "Users";
+ pingfreq = 3 minutes;
+ sendq = 300000;
+ maxlinks = 30000;
+ usermode = "+i";
+};
+
+# VIP user class (aka locals, opers etc..)
+Class {
+ name = "Local";
+ pingfreq = 3 minutes;
+ sendq = 600000;
+ maxlinks = 100;
+ usermode = "+iw";
+};
+
+# Oper class (global)
+Class {
+ name = "Opers";
+ pingfreq = 3 minutes;
+ sendq = 10240000;
+ maxlinks = 10;
+ local = no;
+ # privs
+ die = no;
+ restart = no;
+ rehash = no;
+ jupe = no;
+ local_jupe = no;
+ freeform = yes; # change this if you want to disable freeform sethost for your opers 
+};
+
+# Oper class (global)
+Class {
+ name = "Admin";
+ pingfreq = 3 minutes;
+ sendq = 10240000;
+ maxlinks = 10;
+ local = no;
+ gline = yes;
+ badchan = yes;
+ rehash = yes;
+ freeform = yes;
+ set = yes;
+ die = yes;
+ restart = yes;
+ rehash = yes;
+};
+
+# -----------------------------------------------------------------------------
+# Client lines (aka Ilines)
+# -----------------------------------------------------------------------------
+# username = "ident";       host = "host";              ip = "127.0.0.0/8";
+# password = "password";   class = "classname";   maxlinks = 3;
+
+# Fall back entries (we let everyone in)
+Client { class = "Users"; ip = "*@*"; };
+Client { class = "Users"; host = "*@*"; };
+
+# -----------------------------------------------------------------------------
+# UWorld/Jupe (aka ulines)
+# -----------------------------------------------------------------------------
+
+# [UWorld]
+#UWorld {
+#  name = "xevres.xchannel.org";
+#  name = "fruburst.xchannel.org";
+#};
+
+Jupe {
+  nick = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,{,|,},~,-,_,`";
+  nick = "UWorld,NickServ,ChanServ,telnet,backdoor,qauth,auth,admin,support,operserv";
+  nick = "O2";
+  nick = "NO,noperserv";
+  nick = "N2,N3,N4,N5,N6,N7,N8,N9";
+};
+
+# -----------------------------------------------------------------------------
+# Kill (aka klines)
+# -----------------------------------------------------------------------------
+# host     = "user@host";      reason = "The reason the user will see";
+# realname = "realnametoban";    file = "path/to/file/with/reason/to/show";
+
+Kill {
+  username = "*root";
+  reason = "Do not IRC as root";
+};
+
+Kill {
+  username = "*Administrator";
+  reason = "Do not IRC as root";
+};
+
+# -----------------------------------------------------------------------------
+# Connect (aka clines)
+# -----------------------------------------------------------------------------
+# name        = "servername";    host = "hostnameORip";    vhost = "localIP";
+# password    = "passwd";        port = portno;            class = "classname"; 
+# maxhops     = 2;               hub  = "*.eu.undernet.org"; 
+# autoconnect = no; (default = yes!)
+
+# Hub
+#Connect {
+# name = "hub.example.com";
+# host = "hostnameORip";
+# password = "secret";
+# port = 4400;
+# class = "Server";
+# autoconnect = yes;
+# hub;
+#};
+
+# Leafs
+#Connect {
+# name = "leaf.example.com";
+# host = "hostnameORip";
+# password = "secret";
+# port = 4400;
+# class = "LeafServer";
+# autoconnect = yes;
+#};
+
+# Services
+#Connect {
+# name = "xevres.example.com";
+# host = "hostnameORip";
+# password = "secret";
+# port = 4400;
+# class = "Server";
+#};
+
+# -----------------------------------------------------------------------------
+# CRule (aka dlines)
+# -----------------------------------------------------------------------------
+# server = "servermask";     rule = "connectrule";
+# Setting all to yes makes the rule always apply. Otherwise it only
+# applies to autoconnects.
+# all = yes;
+# The following block is recommended for leaf servers:
+#CRULE { server = "*"; rule = "directcon(*)"; };
+
+# -----------------------------------------------------------------------------
+# spoofhosts (aka slines)
+# -----------------------------------------------------------------------------
+# username = "ident"    host = "host"    password = "passwd"
+
+# slines (with pw)
+#Spoofhost "testsline.quakenet.org"  { password = "secret"; };
+# slines (without pw) thats how to define them when having freeform turned off.
+#Spoofhost "testsline2.quakenet.org" { username = "x"; host = "nohost"; };
+
+# -----------------------------------------------------------------------------
+# Operator (aka Olines)
+# -----------------------------------------------------------------------------
+
+#Server Admin
+#Operator {
+#  host     = "*";
+#  password = "MD5Hash";
+#  name     = "master";
+#  class    = "Admin";
+#};
+
+# -----------------------------------------------------------------------------
+# Quarantine (aka qlines)
+# -----------------------------------------------------------------------------
+Quarantine {
+  "#shells" = "Thou shalt not support the h4><0rz";
+#  "&kiddies" = "They can take care of themselves";
+};
+
+# -----------------------------------------------------------------------------
+# Pseudos
+# -----------------------------------------------------------------------------
+# name = "X";    nick = "X@channels.bla" ;    prepend = "LOGIN ";
+#Pseudo "CHANSERV" {
+# name = "X";
+# nick = "X@channels.undernet.org";
+#};
+#Pseudo "AUTH" {
+#  name = "X";
+#  prepend = "AUTH ";
+#  nick = "X";
+#};
+
+# -----------------------------------------------------------------------------
+# Port (aka plines)
+# -----------------------------------------------------------------------------
+# port   = number;      mask   = "ipmask"    vhost = "virtualhostinterfaceip"
+# server = yes;         hidden = yes
+# mask only contains IP addresses or '*'
+# hidden, hides a port from stats
+
+# Server-to-Server
+Port {
+  port   = 4400;
+  server = yes;
+  hidden = yes;
+  vhost  = "%IPv4%";
+};
+
+# Client-to-Server
+Port { vhost = "%IPv4%" 6667; };
+#Port { vhost = "%IPv6%" 6667; };
+Port { vhost = "%IPv4%" 6668; };
+#Port { vhost = "%IPv6%" 6668; };
+
+Port { vhost = "%IPv4%" 7000; Sslonly; };
+#Port { vhost = "%IPv6%" 7000; Sslonly; };
+Port { vhost = "%IPv4%" 9999; Sslonly; };
+#Port { vhost = "%IPv6%" 9999; Sslonly; };
+
+# -----------------------------------------------------------------------------
+# Feature (aka F:lines)
+# -----------------------------------------------------------------------------
+# We better doublecheck what we set here!
+
+features {
+  "LOG" = "SYSTEM" "FILE" "ircd.log";
+  "LOG" = "CONFIG" "FILE" "conf.log";
+# "LOG" = "DEBUG" "FILE" "debug.log";
+  "LOG" = "NETWORK" "FILE" "network.log";
+  "LOG" = "SYSTEM" "LEVEL" "CRIT";
+  "DOMAINNAME"            = "%FQDN%";
+  "RELIABLE_CLOCK"        = "FALSE";
+  "BUFFERPOOL"            = "96000000";
+# "HAS_FERGUSON_FLUSHER"  = "FALSE";
+# "CLIENT_FLOOD"          = "1024";
+# "SERVER_PORT"           = "4400";
+  "NODEFAULTMOTD"         = "FALSE";
+# "MOTD_BANNER"           = "TRUE";
+# "KILL_IPMISMATCH"       = "FALSE";
+# "IDLE_FROM_MSG"         = "TRUE";
+  "HUB"                   = "TRUE";
+# "WALLOPS_OPER_ONLY"     = "FALSE";
+# "NODNS"                 = "FALSE";
+# "RANDOM_SEED"           = "9723481";
+# "DEFAULT_LIST_PARAM"    = "TRUE";
+  "NICKNAMEHISTORYLENGTH" = "800";
+  "NETWORK"               = "%NETWORK%";
+  "HOST_HIDING"           = "TRUE";
+  "SETHOST"               = "TRUE";
+  "SETHOST_USER"          = "TRUE";
+  "SETHOST_AUTO"          = "TRUE";
+  "HIDDEN_HOST"           = "loves.%FQDN%";
+  "HIDDEN_IP"             = "127.0.0.1";
+# "URLREG"                = "https://example.com/register";
+# "KILLCHASETIMELIMIT"    = "30";
+  "MAXCHANNELSPERUSER"    = "30";
+  "NICKLEN"               = "15";
+  "TOPIC_BURST"           = "TRUE";
+# "AVBANLEN"              = "40";
+# "MAXBANS"               = "45";
+# "MAXSILES"              = "15";
+# "HANGONGOODLINK"        = "300";
+# "HANGONRETRYDELAY"      = "10";
+# "CONNECTTIMEOUT"        = "90";
+# "MAXIMUM_LINKS"         = "1";
+# "PINGFREQUENCY"         = "120";
+# "CONNECTFREQUENCY"      = "600";
+# "DEFAULTMAXSENDQLENGTH" = "40000";
+# "GLINEMAXUSERCOUNT"     = "20";
+# "MPATH"                 = "ircd.motd";
+# "RPATH"                 = "remote.motd";
+# "PPATH"                 = "ircd.pid";
+# "TOS_SERVER"            = "0x08";
+# "TOS_CLIENT"            = "0x08";
+# "POLLS_PER_LOOP"        = "200";
+# "IRCD_RES_TIMEOUT"      = "4";
+# "IRCD_RES_RETRIES"      = "2";
+# "AUTH_TIMEOUT"          = "9";
+# "IPCHECK_CLONE_LIMIT"   = "4";
+# "IPCHECK_CLONE_PERIOD"  = "40";
+# "IPCHECK_CLONE_DELAY"   = "600";
+# "CHANNELLEN" = "200";
+  "CONFIG_OPERCMDS"       = "TRUE";
+  "OPLEVELS"              = "FALSE";
+  "ZANNELS"               = "FALSE";
+  "LOCAL_CHANNELS"        = "FALSE";
+# "ANNOUNCE_INVITES"      = "FALSE";
+# "HIS_SERVERNAME"        = "*.example.com";
+# "HIS_SERVERINFO"        = "%DESCRIPTION%";
+# "HIS_URLSERVERS"        = "";
+};
