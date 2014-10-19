@@ -20,7 +20,6 @@ touch /opt/local/etc/ircd/ircd.motd
 ln -s /opt/local/etc/ircd/ircd.motd /var/ircd/ircd.motd
 
 # Fix all permissions
-chmod -R 400 ${cert_dir}
 chown -R ircd:ircd ${cert_dir}
 
 # Modify original config file and copy it to ircd.conf if not exists
