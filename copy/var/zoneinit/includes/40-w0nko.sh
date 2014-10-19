@@ -23,13 +23,27 @@ ln -s /opt/local/etc/ircd/ircd.motd /var/ircd/ircd.motd
 chmod -R 400 ${cert_dir}
 chown -R ircd:ircd ${cert_dir}
 
-# Move original config file back
-mv /var/ircd/ircd.conf.orig /opt/local/etc/ircd/
-
 # Modify original config file and copy it to ircd.conf if not exists
 if [ ! -e /opt/local/etc/ircd/ircd.conf ]; then
-	echo "Modify original file"
-	cp /opt/local/etc/ircd/ircd.conf.orig /opt/local/etc/ircd/ircd.conf
+	# Create config based on the minimal template
+	network=$(mdata-get ircd_network 2>/dev/null || echo 'Example')
+	description=$(mdata-get ircd_description 2>/dev/null || echo 'Awesome Example Network')
+	# Network workaround
+	nics=$(mdata-get sdc:nics)
+	if [[ ${nics} =~ "dhcp" ]]; then
+		ipv4=$(ifconfig net0 | grep inet | awk '{ print $2 }')
+		ipv6='%IPv6%'
+	else
+		ipv4=$(echo ${nics} | json 0.ip | sed 's:/.*::g')
+		ipv6=$(echo ${nics} | json 1.ip | sed 's:/.*::g')
+	fi
+
+	sed -e "s:%FQDN%:${host}:g" \
+		-e "s:%DESCRIPTION%:${description}:g" \
+		-e "s:%IPv4%:${ipv4}:g" \
+		-e "s:%IPv6%:${ipv6}:g" \
+		-e "s:%NETWORK%:${network}:g" \
+		/var/ircd/ircd.conf.minimal > /opt/local/etc/ircd/ircd.conf
 fi
 
 # Enable service
