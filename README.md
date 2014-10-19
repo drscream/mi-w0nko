@@ -10,3 +10,10 @@ went wront the server will not start:
 
 - `/var/ircd`: Containts `ircd.motd`, `ircd.pem`, pid and log files
 - `/opt/local/etc/ircd`: Contains the configuration file `ircd.conf`
+
+The configuration file is stored in a delegate dataset.
+
+## mdata variables
+
+- `ircd_ssl`: SSL certificate, key and ca chain in PEM format
+- `ircd_network`: Name of your network
