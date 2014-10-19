@@ -15,6 +15,11 @@ echo "* Configuring image specific packages.";
 echo "* Install w0nko irc server"
 pkg_add http://pkgsrc.smartos.skylime.net/skylime-extra/2014Q2/x86_64/w0nko-13.11-dev.tgz
 
+# Add SMF manifests
+echo "* Add SMF manifests"
+svccfg import /tmp/w0nko.xml
+rm /tmp/w0nko.xml
+
 # Clean up
 echo "* Cleaning up."
 rm -rf /root/*
