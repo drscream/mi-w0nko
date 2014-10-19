@@ -24,7 +24,13 @@ chmod -R 400 ${cert_dir}
 chown -R ircd:ircd ${cert_dir}
 
 # Move original config file back
-mv /root/ircd.conf.orig /opt/local/etc/ircd/
+mv /var/ircd/ircd.conf.orig /opt/local/etc/ircd/
+
+# Modify original config file and copy it to ircd.conf if not exists
+if [ ! -e /opt/local/etc/ircd/ircd.conf ]; then
+	echo "Modify original file"
+	cp /opt/local/etc/ircd/ircd.conf.orig /opt/local/etc/ircd/ircd.conf
+fi
 
 # Enable service
 svcadm enable svc:/network/w0nko:default

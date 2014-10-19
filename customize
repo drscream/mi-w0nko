@@ -22,7 +22,7 @@ rm /tmp/w0nko.xml
 
 # Create a copy of the configuration file because of delegate dataset
 echo "* Create a copy of the configuration file because of delegate dataset"
-mv /opt/local/etc/ircd/ircd.conf /root/ircd.conf.orig
+mv /opt/local/etc/ircd/ircd.conf /var/ircd/ircd.conf.orig
 
 # Clean up
 echo "* Cleaning up."
