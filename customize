@@ -8,25 +8,12 @@ PATH=/opt/local/gnu/bin:/opt/local/bin:/opt/local/sbin:/usr/bin:/usr/sbin
 # Exit if any commands fail
 set -o errexit
 
-# Configuring image specific packages
-echo "* Configuring image specific packages.";
-
-# Install w0nko irc server
-echo "* Install w0nko irc server"
-pkg_add http://pkgsrc.smartos.skylime.net/skylime-extra/2014Q2/x86_64/w0nko-13.11-dev.tgz
-
-# Add SMF manifests
-echo "* Add SMF manifests"
-svccfg import /tmp/w0nko.xml
-rm /tmp/w0nko.xml
-
-# Create a copy of the configuration file because of delegate dataset
 echo "* Create a copy of the configuration file because of delegate dataset"
 mv /opt/local/etc/ircd/ircd.conf /var/ircd/ircd.conf.orig
 
-# Clean up
+echo "* Cleanup home/admin because of delegate dataset usage"
+rm -rf /home/admin/.[^.]*
+
 echo "* Cleaning up."
 rm -rf /root/*
-
-# Prepare image for provisioning
 sm-prepare-image -y
