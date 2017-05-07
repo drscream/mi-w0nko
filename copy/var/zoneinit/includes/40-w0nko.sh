@@ -28,22 +28,22 @@ if [ ! -e /opt/local/etc/ircd/ircd.conf ]; then
 	network=$(mdata-get ircd_network 2>/dev/null || echo 'Example')
 	description=$(mdata-get ircd_description 2>/dev/null || echo 'Awesome Example Network')
 	# Network workaround
-	nics=$(mdata-get sdc:nics)
+	nics=$(mdata-get sdc:nics | json -d '|' -e 'this.ips = this.ips && this.ips.join(" ")' -a ips)
 	if [[ ${nics} =~ "dhcp" ]]; then
 		ipv4=$(ifconfig net0 | grep inet | awk '{ print $2 }')
 		ipv6='%IPv6%'
 	else
-		ipv4=$(echo ${nics} | json 0.ip | sed 's:/.*::g')
-		ipv6=$(echo ${nics} | json 1.ip | sed 's:/.*::g')
+		ipv4=$(echo ${nics} | awk '{ print $1 }' | sed 's|/.*||g')
+		ipv6=$(echo ${nics} | awk '{ print $2 }' | sed 's|/.*||g')
 	fi
 
-	sed -e "s:%FQDN%:${host}:g" \
-		-e "s:%DESCRIPTION%:${description}:g" \
-		-e "s:%IPv4%:${ipv4}:g" \
-		-e "s:%IPv6%:${ipv6}:g" \
-		-e "s:%NETWORK%:${network}:g" \
+	gsed -e "s|%FQDN%|${host}|g" \
+		-e "s|%DESCRIPTION%|${description}|g" \
+		-e "s|%IPv4%|${ipv4}|g" \
+		-e "s|%IPv6%|${ipv6}|g" \
+		-e "s|%NETWORK%|${network}|g" \
 		/var/ircd/ircd.conf.minimal > /opt/local/etc/ircd/ircd.conf
 fi
 
 # Enable service
-svcadm enable svc:/network/w0nko:default
+svcadm enable svc:/pkgsrc/w0nko:default
