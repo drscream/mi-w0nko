@@ -1,11 +1,11 @@
 {
   "name": "w0nko",
-  "version": "20.4.0",
+  "version": "23.4.0",
   "description": "w0nko IRC Server",
   "organization": "SkyLime",
   "brand": "Instance",
   "homepage": "https://github.com/skylime/mi-core-base",
-  "base": "b17e3cc1-5993-4af9-9e5e-70653fa856f6",
+  "base": "97cc75ec-ba4d-45cd-8966-e53baa0f2d5e",
   "customer_metadata": {
     "admin_authorized_keys": {
       "type": "text",
