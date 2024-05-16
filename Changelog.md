@@ -1,5 +1,14 @@
 # Changelog
 
+## 23.4.0
+
+### New
+
+* Provide latest w0nko version with TLS 1.3 support. [Thomas Merkel]
+
+  Include new 23.4 LTS image and good old stable w0nko version but build
+  to support TLS 1.3 and newer ciphers.
+
 ## 14.2.0
 
 ### Other
